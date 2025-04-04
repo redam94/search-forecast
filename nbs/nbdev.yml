@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "search-forecast"
+  site-url: "https://redam94.github.io/search-forecast"
+  description: "Search forecasting tool"
+  repo-branch: main
+  repo-url: "https://github.com/redam94/search-forecast"
