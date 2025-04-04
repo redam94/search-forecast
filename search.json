@@ -1,0 +1,75 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "search-forecast",
+    "section": "",
+    "text": "This file will become your README and also the index of your documentation.",
+    "crumbs": [
+      "search-forecast"
+    ]
+  },
+  {
+    "objectID": "index.html#developer-guide",
+    "href": "index.html#developer-guide",
+    "title": "search-forecast",
+    "section": "Developer Guide",
+    "text": "Developer Guide\nIf you are new to using nbdev here are some useful pointers to get you started.\n\nInstall search_forecast in Development mode\n# make sure search_forecast package is installed in development mode\n$ pip install -e .\n\n# make changes under nbs/ directory\n# ...\n\n# compile to have changes apply to search_forecast\n$ nbdev_prepare",
+    "crumbs": [
+      "search-forecast"
+    ]
+  },
+  {
+    "objectID": "index.html#usage",
+    "href": "index.html#usage",
+    "title": "search-forecast",
+    "section": "Usage",
+    "text": "Usage\n\nInstallation\nInstall latest from the GitHub repository:\n$ pip install git+https://github.com/redam94/search-forecast.git\nor from conda\n$ conda install -c redam94 search_forecast\nor from pypi\n$ pip install search_forecast\n\n\nDocumentation\nDocumentation can be found hosted on this GitHub repository’s pages. Additionally you can find package manager specific guidelines on conda and pypi respectively.",
+    "crumbs": [
+      "search-forecast"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "search-forecast",
+    "section": "How to use",
+    "text": "How to use\nFill me in please! Don’t forget code examples:\n\n1+1\n\n2",
+    "crumbs": [
+      "search-forecast"
+    ]
+  },
+  {
+    "objectID": "wrapper/pymc_wrapper.html",
+    "href": "wrapper/pymc_wrapper.html",
+    "title": "PyMC Wrapper",
+    "section": "",
+    "text": "source\n\nHSGP\n\n HSGP (name:str, **kwargs)\n\nGeneralized prior interface for pymc-marketing. This generalizes the use of the apply method to any prior.\n\nhspg = HSGP(\n    \"hspg\",\n    m=40,\n    ls=1,\n    eta=3,\n    L=60,\n    dims=(\"date\",)\n)\n\n\nsource\n\n\nHSGPPeriodic\n\n HSGPPeriodic (name:str, **kwargs)\n\nGeneralized prior interface for pymc-marketing. This generalizes the use of the apply method to any prior.\n\nsource\n\n\nYearlyFourier\n\n YearlyFourier (name:str, **kwargs)\n\nGeneralized prior interface for pymc-marketing. This generalizes the use of the apply method to any prior.\n\nyearly_fourier = YearlyFourier(\n    name=\"yearly_fourier\",\n    n_order=3,\n    dims=(\"date\",),\n)\n\n\n\n\nFourierBase.sample_prior\n\n FourierBase.sample_prior (coords:dict|None=None, **kwargs)\n\nSample the prior distributions.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\ncoords\ndict | None\nNone\nCoordinates for the prior distribution, by default None\n\n\nkwargs\nVAR_KEYWORD\n\nAdditional keywords for sample_prior_predictive\n\n\nReturns\nDataset\n\nPrior distribution.\n\n\n\n\n\n\nFourierBase.sample_curve\n\n FourierBase.sample_curve (parameters:arviz.data.inference_data.InferenceD\n                           ata|xarray.core.dataset.Dataset,\n                           use_dates:bool=False,\n                           start_date:str|datetime.datetime|None=None)\n\nCreate full period of the Fourier seasonality.\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nparameters\narviz.data.inference_data.InferenceData | xarray.core.dataset.Dataset\n\nInference data or dataset containing the Fourier parameters.Can be posterior or prior.\n\n\nuse_dates\nbool\nFalse\nIf True, use datetime coordinates for the x-axis. Defaults to False.\n\n\nstart_date\nstr | datetime.datetime | None\nNone\nStarting date for the Fourier curve. If not provided and use_dates is True,it will be derived from the current year or month. Defaults to None.\n\n\nReturns\nDataArray\n\nFull period of the Fourier seasonality.\n\n\n\n\nprior_sample = yearly_fourier.sample_prior()\ncurve_sample = yearly_fourier.sample_curve(prior_sample)\ncurve_sample.sel(chain=0, draw=slice(10)).plot(x='day', hue='draw');\n\nSampling: [yearly_fourier_beta]\nSampling: []\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nsource\n\n\nPrior\n\n Prior (name:str, **kwargs)\n\nGeneralized prior interface for pymc-marketing. This generalizes the use of the apply method to any prior.\n\nsource\n\n\nData\n\n Data (name:str, dims:Optional[Tuple[str]]=None)\n\nGeneralized prior interface for pymc-marketing. This generalizes the use of the apply method to any prior.",
+    "crumbs": [
+      "wrapper",
+      "PyMC Wrapper"
+    ]
+  },
+  {
+    "objectID": "utils/data_gen.html",
+    "href": "utils/data_gen.html",
+    "title": "Data Generation",
+    "section": "",
+    "text": "source\n\nhill\n\n hill (x:numpy.ndarray, half_sat:float, slope:float)\n\nHill function for dose-response curves.\n\nsource\n\n\ngenerate_data_search_data\n\n generate_data_search_data (n_days:int=400, n_geos:int=10, seed:int=42,\n                            start_date:str='2020-01-01', budget=None)",
+    "crumbs": [
+      "utils",
+      "Data Generation"
+    ]
+  },
+  {
+    "objectID": "examples/search_prediction.html",
+    "href": "examples/search_prediction.html",
+    "title": "Search Prediction",
+    "section": "",
+    "text": "model = dowhy.CausalModel(\n    data=data.to_dataframe(),\n    graph=causal_graph.replace(\"\\n\", \" \"),\n    treatment=\"budget\",\n    outcome=\"observed_clicks\",\n)\nmodel.view_model()",
+    "crumbs": [
+      "examples",
+      "Search Prediction"
+    ]
+  }
+]
