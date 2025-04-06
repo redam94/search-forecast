@@ -5,6 +5,9 @@ website:
       - section: examples
         contents:
           - examples/00_search_prediction.ipynb
+      - section: model
+        contents:
+          - model/00_search_model.ipynb
       - section: utils
         contents:
           - utils/00_data_gen.ipynb

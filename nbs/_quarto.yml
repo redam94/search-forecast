@@ -12,10 +12,15 @@ format:
 website:
   twitter-card: true
   open-graph: true
+  repo-branch: master
+  repo-url: "https://github.com/redam94/search-forecast"
   repo-actions: [issue]
   navbar:
     background: primary
     search: true
+    right:
+      - icon: github
+        href: "https://github.com/redam94/search-forecast"
   sidebar:
     style: floating
 

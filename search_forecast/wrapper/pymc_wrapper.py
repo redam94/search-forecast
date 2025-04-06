@@ -13,7 +13,7 @@ import xarray as xr
 import pymc as pm
 import pytensor.tensor as pt
 from pymc_marketing.prior import handle_dims
-from pymc_marketing.prior import Prior as _Prior
+from pymc_marketing.prior import (Prior as _Prior, register_tensor_transform)
 from pymc_marketing.mmm.hsgp import (
     HSGP as _HSGP, 
     HSGPPeriodic as _HSGPPeriodic
@@ -26,7 +26,7 @@ from pymc_marketing.mmm.fourier import (
 
 
 # %% auto 0
-__all__ = ['HSGP', 'HSGPPeriodic', 'YearlyFourier', 'Prior', 'Data']
+__all__ = ['HSGP', 'HSGPPeriodic', 'YearlyFourier', 'WeeklyFourier', 'Prior', 'Data']
 
 # %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 4
 class _GeneralPrior(ABC):
@@ -38,14 +38,39 @@ class _GeneralPrior(ABC):
         **kwargs
         ):
         self.name = name
+        self._variable = None
 
     @abstractmethod
+    def _apply(
+        self, 
+        data: xr.DataArray | pt.TensorLike | None, 
+        model: pm.Model | None = None
+    ) -> pt.TensorLike:
+        """Apply the prior to the data. This is an abstract method that must be implemented by subclasses."""
+        raise NotImplementedError("Subclasses must implement _apply method.")
+    
     def apply(
         self, 
         data: xr.DataArray | pt.TensorLike | None, 
         model: pm.Model | None = None
     ) -> pt.TensorLike:
-        raise NotImplementedError
+        """Apply the prior to the data. This method is a wrapper around the _apply method."""
+
+        if self._variable is None:
+            self._variable = self._apply(data, model)
+
+        return self._variable
+
+    
+    def transform(
+        self,
+        transform: Callable,
+    ) -> _TransformPrior:
+        """Transform the prior using a callable function."""
+        return _TransformPrior(
+            self,
+            transform
+        )
 
     def __add__(
         self, 
@@ -56,7 +81,7 @@ class _GeneralPrior(ABC):
                 self, 
                 other
             ], 
-            name=f"{self.name}+{other.name}"
+            name=f"({self.name}+{other.name})"
         )
 
     def __mul__(
@@ -68,20 +93,52 @@ class _GeneralPrior(ABC):
                 self, 
                 other
             ], 
-            name=f"{self.name}*{other.name}")
+            name=f"({self.name}*{other.name})")
+
+    def __truediv__(self, other: _GeneralPrior) -> _DivPrior:
+        return _DivPrior(
+            numerator=self,
+            denominator=other,
+            name=f"({self.name}/{other.name})"
+        )
 
     def __call__(
         self, 
         node: _GeneralPrior
         ) -> _GeneralPrior:
-        return _AppliedNode(
-            f"{self.name}({node.name})", 
+        return _AppliedPrior(
+            f"({self.name}({node.name}))", 
             self, 
             node
         )
 
 
 # %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 5
+class _TransformPrior(_GeneralPrior):
+    """Transform the prior using a callable function."""
+    def __init__(
+        self, 
+        prior: _GeneralPrior, # Prior to be transformed
+        transform: Callable # Callable function to transform the prior
+        ) -> None:
+        """Initialize the transform prior."""
+        super().__init__(prior.name)
+        self.prior = prior
+        self.transform = transform
+        self._dims = prior._dims
+
+    def _apply(
+        self, 
+        data: xr.DataArray | pt.TensorLike | None, 
+        model: pm.Model | None = None
+    ) -> pt.TensorLike:
+        """Apply the prior to the data and transform it using the callable function."""
+        model = pm.modelcontext(model)
+
+        with model:
+            return self.transform(self.prior.apply(data))
+
+# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 6
 class _CombPrior(_GeneralPrior):
     def __init__(
         self, 
@@ -97,8 +154,16 @@ class _CombPrior(_GeneralPrior):
                 dim for dims in [child._dims for child in self.children] for dim in dims
             )
         )
+    def _process_children(self):
+        flattened_children = []
+        for child in self.children:
+            if isinstance(child, _CombPrior):
+                flattened_children.extend(child._process_children())
+            else:
+                flattened_children.append(child)
+        return flattened_children
 
-    def apply(
+    def _apply(
         self, 
         data: xr.DataArray | pt.TensorLike, 
         model: pm.Model | None = None
@@ -106,22 +171,54 @@ class _CombPrior(_GeneralPrior):
         model = pm.modelcontext(model)
         
         with model:
-            self.children[0].apply(data)
-            for _child in (self.children[1:]):
+            children = self._process_children()
+            
+            for _child in (children):
                 _child.apply(data)
-            self._variable = pm.Deterministic(
-                self.name,
+            self._variable = (
                 self.agg_fn(
                     [
                         handle_dims(child._variable, child._dims, self._dims)
-                        for child in self.children
+                        for child in children
                     ]
-                ),
-                dims=self._dims,
-            )
+                ))
         return self._variable
 
-# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 6
+# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 7
+class _DivPrior(_GeneralPrior):
+    def __init__(
+        self, 
+        numerator: _GeneralPrior, 
+        denominator: _GeneralPrior, 
+        name: str
+        ):
+        super().__init__(name)
+        self.numerator = numerator
+        self.denominator = denominator
+        self._dims = tuple(
+            set(
+                dim for dims in [numerator._dims, denominator._dims] for dim in dims
+            )
+        )
+
+    def _apply(
+        self, 
+        data: xr.DataArray | pt.TensorLike, 
+        model: pm.Model | None = None
+    ) -> pt.TensorLike:
+        model = pm.modelcontext(model)
+
+        with model:
+            num = self.numerator.apply(data)
+            dem = self.denominator.apply(data)
+
+            numerator = handle_dims(num, self.numerator._dims, self._dims)
+            denominator = handle_dims(dem, self.denominator._dims, self._dims)
+            self._variable = numerator / denominator
+            
+            return self._variable
+
+# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 8
 class _SumPrior(_CombPrior):
     def __init__(
         self, 
@@ -130,7 +227,7 @@ class _SumPrior(_CombPrior):
         ):
         super().__init__(children, name, sum)
 
-# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 7
+# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 9
 class _ProductPrior(_CombPrior):
     def __init__(
         self, 
@@ -139,7 +236,7 @@ class _ProductPrior(_CombPrior):
         ):
         super().__init__(children, name, np.prod)
 
-# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 8
+# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 10
 class _AppliedPrior(_GeneralPrior):
     def __init__(
         self, 
@@ -152,7 +249,7 @@ class _AppliedPrior(_GeneralPrior):
         self._input_node = input_node
         self._dims = caller_node._dims
 
-    def apply(
+    def _apply(
         self, 
         data: xr.DataArray | pt.TensorLike | None, 
         model: pm.Model | None = None
@@ -164,7 +261,7 @@ class _AppliedPrior(_GeneralPrior):
         
         return self._variable
 
-# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 9
+# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 11
 class HSGP(_GeneralPrior):
     def __init__(
         self, 
@@ -181,7 +278,7 @@ class HSGP(_GeneralPrior):
             return getattr(self._gp, name)
         raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{name}'")
 
-    def apply(
+    def _apply(
         self,
         data: xr.DataArray | pt.TensorLike | None, 
         model: pm.Model | None = None
@@ -191,7 +288,7 @@ class HSGP(_GeneralPrior):
             self._variable = self._gp.register_data(data).create_variable(self.name)
         return self._variable
 
-# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 11
+# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 13
 class HSGPPeriodic(_GeneralPrior):
     def __init__(
         self, 
@@ -208,7 +305,7 @@ class HSGPPeriodic(_GeneralPrior):
             return getattr(self._gp, name)
         raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{name}'")
 
-    def apply(
+    def _apply(
         self,
         data: xr.DataArray | pt.TensorLike | None, 
         model: pm.Model | None = None
@@ -218,7 +315,7 @@ class HSGPPeriodic(_GeneralPrior):
             self._variable = self._gp.register_data(data).create_variable(self.name)
         return self._variable
 
-# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 12
+# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 14
 class YearlyFourier(_GeneralPrior):
     def __init__(self, name: str, **kwargs):
         super().__init__(name)
@@ -231,7 +328,7 @@ class YearlyFourier(_GeneralPrior):
             return getattr(self._fourier, name)
         raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{name}'")
     
-    def apply(
+    def _apply(
         self, data: xr.DataArray | pt.TensorLike | None, model: pm.Model | None = None
     ) -> pt.TensorLike:
         model = pm.modelcontext(model)
@@ -241,14 +338,39 @@ class YearlyFourier(_GeneralPrior):
             )
         return self._variable
 
-# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 17
-class Prior(_GeneralPrior):
+# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 19
+class WeeklyFourier(_GeneralPrior):
     def __init__(self, name: str, **kwargs):
         super().__init__(name)
-        self._prior = _Prior(**kwargs)
-        self._dims = prior.dims
+        kwargs |= {'prefix': name}
+        self._fourier = _WeeklyFourier(**kwargs)
+        self._dims = kwargs.get("dims", ("date",))
 
-    def apply(
+    def __getattr__(self, name: str):
+        if hasattr(self._fourier, name):
+            return getattr(self._fourier, name)
+        raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{name}'")
+    
+    def _apply(
+        self, data: xr.DataArray | pt.TensorLike | None, model: pm.Model | None = None
+    ) -> pt.TensorLike:
+        model = pm.modelcontext(model)
+        with model:
+            self._variable = pm.Deterministic(
+                self.name, self._fourier.apply(data), dims=self._dims
+            )
+        return self._variable
+
+# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 20
+class Prior(_GeneralPrior):
+    __class__ = _Prior
+    def __init__(self, name: str, **kwargs):
+        super().__init__(name)
+        prior_name = kwargs.pop("prior_name", None)
+        self._prior = _Prior(prior_name, **kwargs)
+        self._dims = self._prior.dims
+
+    def _apply(
         self,
         data: xr.DataArray | pt.TensorLike | None = None,
         model: pm.Model | None = None,
@@ -263,16 +385,17 @@ class Prior(_GeneralPrior):
             return getattr(self._prior, name)
         raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{name}'")
 
-# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 18
+# %% ../../nbs/wrapper/00_pymc_wrapper.ipynb 21
 class Data(_GeneralPrior):
     def __init__(self, name: str, dims: Tuple[str] | None = None):
         super().__init__(name)
         self._dims = dims
 
-    def apply(
+    def _apply(
         self, data: xr.DataArray | pt.TensorLike, model: pm.Model | None = None
     ) -> pt.TensorLike:
         model = pm.modelcontext(model)
+        
         with model:
             self._variable = pm.Data(self.name, data, dims=self._dims)
         return self._variable
