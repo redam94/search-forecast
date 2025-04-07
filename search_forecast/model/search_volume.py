@@ -6,7 +6,7 @@
 __all__ = ['ImpressionPrior', 'ImpressionModel']
 
 # %% ../../nbs/model/00_search_model.ipynb 3
-from enum import StrEnum
+from enum import Enum
 
 import pymc as pm
 import numpy as np
@@ -20,7 +20,7 @@ from search_forecast.wrapper.pymc_wrapper import (
 from ..utils.data_gen import hill
 
 # %% ../../nbs/model/00_search_model.ipynb 4
-class ImpressionPrior(StrEnum):
+class ImpressionPrior(str,Enum):
     """
     Enum for prior distributions of impressions.
     """
