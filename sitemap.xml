@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://redam94.github.io/search-forecast/index.html</loc>
+    <lastmod>2025-04-17T02:58:47.419Z</lastmod>
+  </url>
+  <url>
+    <loc>https://redam94.github.io/search-forecast/wrapper/pymc_wrapper.html</loc>
+    <lastmod>2025-04-17T02:58:50.222Z</lastmod>
+  </url>
+  <url>
+    <loc>https://redam94.github.io/search-forecast/model/search_model.html</loc>
+    <lastmod>2025-04-17T02:58:50.193Z</lastmod>
+  </url>
+  <url>
+    <loc>https://redam94.github.io/search-forecast/utils/data_gen.html</loc>
+    <lastmod>2025-04-17T02:58:48.297Z</lastmod>
+  </url>
+  <url>
+    <loc>https://redam94.github.io/search-forecast/examples/search_prediction.html</loc>
+    <lastmod>2025-04-17T02:58:47.616Z</lastmod>
+  </url>
+</urlset>

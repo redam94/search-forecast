@@ -1,0 +1,2218 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="A Robust Statistical Approach">
+
+<title>Search Forecasting – search-forecast</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-ae44de7e3b26b230a7801128389852ee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Search Forecasting – search-forecast">
+<meta property="og:description" content="A Robust Statistical Approach">
+<meta property="og:image" content="https://redam94.github.io/search-forecast/examples/00_search_prediction_files/figure-html/fig-causal-graph-output-1.png">
+<meta property="og:site_name" content="search-forecast">
+<meta property="og:image:height" content="902">
+<meta property="og:image:width" content="1200">
+<meta name="twitter:title" content="Search Forecasting – search-forecast">
+<meta name="twitter:description" content="A Robust Statistical Approach">
+<meta name="twitter:image" content="https://redam94.github.io/search-forecast/examples/00_search_prediction_files/figure-html/fig-causal-graph-output-1.png">
+<meta name="twitter:image-height" content="902">
+<meta name="twitter:image-width" content="1200">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../favicon.ico" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">search-forecast</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/redam94/search-forecast"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../examples/search_prediction.html">examples</a></li><li class="breadcrumb-item"><a href="../examples/search_prediction.html">Search Forecasting</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../favicon-32x32.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">search-forecast</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">examples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../examples/search_prediction.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Search Forecasting</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">model</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../model/search_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Search Model</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">utils</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../utils/data_gen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Generation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">wrapper</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../wrapper/pymc_wrapper.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">PyMC Wrapper</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction-the-search-advertising-journey" id="toc-introduction-the-search-advertising-journey" class="nav-link active" data-scroll-target="#introduction-the-search-advertising-journey">Introduction: The Search Advertising Journey</a></li>
+  <li><a href="#the-causal-structure-understanding-what-drives-what" id="toc-the-causal-structure-understanding-what-drives-what" class="nav-link" data-scroll-target="#the-causal-structure-understanding-what-drives-what">The Causal Structure: Understanding What Drives What</a></li>
+  <li><a href="#the-data-what-were-modeling" id="toc-the-data-what-were-modeling" class="nav-link" data-scroll-target="#the-data-what-were-modeling">The Data: What We’re Modeling</a>
+  <ul class="collapse">
+  <li><a href="#the-budget-results-relationship-diminishing-returns" id="toc-the-budget-results-relationship-diminishing-returns" class="nav-link" data-scroll-target="#the-budget-results-relationship-diminishing-returns">The Budget-Results Relationship: Diminishing Returns</a></li>
+  </ul></li>
+  <li><a href="#the-model-structure-four-interconnected-components" id="toc-the-model-structure-four-interconnected-components" class="nav-link" data-scroll-target="#the-model-structure-four-interconnected-components">The Model Structure: Four Interconnected Components</a>
+  <ul class="collapse">
+  <li><a href="#defining-inputs-and-statistical-controls" id="toc-defining-inputs-and-statistical-controls" class="nav-link" data-scroll-target="#defining-inputs-and-statistical-controls">1. Defining Inputs and Statistical Controls</a></li>
+  <li><a href="#search-volume-component" id="toc-search-volume-component" class="nav-link" data-scroll-target="#search-volume-component">2. Search Volume Component</a></li>
+  <li><a href="#impression-generation-model" id="toc-impression-generation-model" class="nav-link" data-scroll-target="#impression-generation-model">3. Impression Generation Model</a></li>
+  <li><a href="#click-through-rate-model" id="toc-click-through-rate-model" class="nav-link" data-scroll-target="#click-through-rate-model">4. Click-Through Rate Model</a></li>
+  </ul></li>
+  <li><a href="#the-complete-probabilistic-model" id="toc-the-complete-probabilistic-model" class="nav-link" data-scroll-target="#the-complete-probabilistic-model">The Complete Probabilistic Model</a></li>
+  <li><a href="#fitting-the-model" id="toc-fitting-the-model" class="nav-link" data-scroll-target="#fitting-the-model">Fitting the Model</a>
+  <ul class="collapse">
+  <li><a href="#forecast-results" id="toc-forecast-results" class="nav-link" data-scroll-target="#forecast-results">Forecast Results</a></li>
+  </ul></li>
+  <li><a href="#practical-applications-optimizing-your-strategy" id="toc-practical-applications-optimizing-your-strategy" class="nav-link" data-scroll-target="#practical-applications-optimizing-your-strategy">Practical Applications: Optimizing Your Strategy</a>
+  <ul class="collapse">
+  <li><a href="#budget-optimization" id="toc-budget-optimization" class="nav-link" data-scroll-target="#budget-optimization">Budget Optimization</a></li>
+  <li><a href="#geographic-allocation" id="toc-geographic-allocation" class="nav-link" data-scroll-target="#geographic-allocation">Geographic Allocation</a></li>
+  <li><a href="#seasonal-planning" id="toc-seasonal-planning" class="nav-link" data-scroll-target="#seasonal-planning">Seasonal Planning</a></li>
+  <li><a href="#anomaly-detection" id="toc-anomaly-detection" class="nav-link" data-scroll-target="#anomaly-detection">Anomaly Detection</a></li>
+  </ul></li>
+  <li><a href="#limitations-and-considerations" id="toc-limitations-and-considerations" class="nav-link" data-scroll-target="#limitations-and-considerations">Limitations and Considerations</a></li>
+  <li><a href="#next-steps-implementing-the-model" id="toc-next-steps-implementing-the-model" class="nav-link" data-scroll-target="#next-steps-implementing-the-model">Next Steps: Implementing the Model</a></li>
+  <li><a href="#conclusion-the-value-of-sophisticated-modeling" id="toc-conclusion-the-value-of-sophisticated-modeling" class="nav-link" data-scroll-target="#conclusion-the-value-of-sophisticated-modeling">Conclusion: The Value of Sophisticated Modeling</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/redam94/search-forecast/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="search_prediction.html.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../examples/search_prediction.html">examples</a></li><li class="breadcrumb-item"><a href="../examples/search_prediction.html">Search Forecasting</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Search Forecasting</h1>
+</div>
+
+<div>
+  <div class="description">
+    A Robust Statistical Approach
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p>This document presents a formal analysis of our probabilistic search advertising model, demonstrating how it effectively captures the relationship between marketing expenditure and business outcomes. Using synthetic data that mirrors real-world advertising patterns, we illustrate the model’s structure, statistical properties, and practical applications for optimizing advertising investments.</p>
+<section id="introduction-the-search-advertising-journey" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-the-search-advertising-journey">Introduction: The Search Advertising Journey</h2>
+<p>Search advertising represents a complex ecosystem where multiple factors interact to determine your business outcomes. At its core, the process follows this path:</p>
+<ol type="1">
+<li><strong>Users search</strong> for terms related to your products or services</li>
+<li><strong>Your budget</strong> competes for visibility among these searches</li>
+<li><strong>Impressions</strong> are generated when your ads appear in search results</li>
+<li><strong>Users click</strong> on a portion of these impressions, driving traffic to your site</li>
+</ol>
+<p>While this flow seems straightforward, accurately modeling and predicting these relationships is challenging. Traditional approaches often make simplistic assumptions that don’t capture real-world complexities:</p>
+<ul>
+<li><strong>Linear models</strong> incorrectly assume doubling your budget doubles your results</li>
+<li><strong>Single-factor models</strong> miss the interplay between seasonality, geography, and competition</li>
+<li><strong>Deterministic approaches</strong> fail to account for inherent uncertainty in user behavior</li>
+</ul>
+<p>Our Bayesian hierarchical model overcomes these limitations by respecting the true causal structure of search advertising and quantifying uncertainty at each step.</p>
+</section>
+<section id="the-causal-structure-understanding-what-drives-what" class="level2">
+<h2 class="anchored" data-anchor-id="the-causal-structure-understanding-what-drives-what">The Causal Structure: Understanding What Drives What</h2>
+<p>The foundation of our model is a causal graph that represents how different variables influence each other:</p>
+<div id="cell-fig-causal-graph" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-causal-graph" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-causal-graph-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-causal-graph-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-causal-graph-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Causal graph for the search volume model.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>This causal structure encodes several key insights:</p>
+<ul>
+<li><strong>Search volume</strong> is determined by time (seasonality) and geographic factors, <strong>not</strong> by your budget</li>
+<li><strong>Budget</strong> directly influences impressions but has no direct effect on search volume</li>
+<li><strong>Impressions</strong> are constrained by both budget and available search volume</li>
+<li><strong>Clicks</strong> come only from impressions, with rates influenced by time and geography</li>
+</ul>
+<p>This separation of factors you control (budget) from those you don’t (market demand) provides clarity about what marketing levers you can pull and their expected effects.</p>
+</section>
+<section id="the-data-what-were-modeling" class="level2">
+<h2 class="anchored" data-anchor-id="the-data-what-were-modeling">The Data: What We’re Modeling</h2>
+<p>To demonstrate the model, let’s examine some synthetic data that captures typical patterns in search advertising:</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Search Volume</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Budget Allocation</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Impressions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false">Clicks</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p><strong>The Market Opportunity</strong></p>
+<div id="cell-fig-avg-search-volume" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-avg-search-volume" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-avg-search-volume-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-avg-search-volume-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-avg-search-volume-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Search Volume across geographies, showing a strong seasonal patterns at both the weekly and yearly level.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Search volume represents the total market opportunity—how many people are searching for relevant terms. Notice in <a href="#fig-avg-search-volume" class="quarto-xref">Figure&nbsp;2</a>:</p>
+<ul>
+<li><strong>Annual seasonality</strong>: In this example, peak volume occurs around April-May with lowest volume in September</li>
+<li><strong>Weekly cycles</strong>: Regular oscillations show higher weekday searches and weekend drops</li>
+<li>These patterns exist <strong>regardless of your advertising budget</strong></li>
+</ul>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p><strong>Your Strategic Decisions</strong></p>
+<div id="cell-fig-budget-allocation" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-budget-allocation" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-budget-allocation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-budget-allocation-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-budget-allocation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Budget allocation across geographies over time, showing a strong seasonal pattern and geos with little to no budget.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Budget allocation shows how you’re distributing your advertising spend:</p>
+<ul>
+<li><strong>Varying levels</strong> across different geographic regions</li>
+<li><strong>Seasonal adjustments</strong> that often (but not always) mirror search volume patterns</li>
+<li><strong>Strategic pauses</strong> where budget drops to zero in specific regions</li>
+</ul>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p><strong>Your Market Visibility</strong></p>
+<div id="cell-fig-imp-data" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-imp-data" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-imp-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-imp-data-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-imp-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Impressions show a strong seasonal pattern and geos with little to no impressions.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Impressions represent how many times your ads appear in search results:</p>
+<ul>
+<li><strong>Seasonal patterns</strong> similar to search volume</li>
+<li><strong>Sharp drops to zero</strong> when budget is paused</li>
+<li><strong>Immediate recovery</strong> when budget resumes</li>
+</ul>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<p><strong>Your success rate</strong></p>
+<div id="cell-fig-click-data" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-click-data" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-click-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-click-data-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-click-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Synthetic click data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Observed clicks tend to have a seasonal and yearly patternd driven by the effects of search volume, search impressions and consumer behaviors. Notice:</p>
+<ul>
+<li>Clicks drop to zero when impressions drop to zero</li>
+<li>Strong seasonal patterns are present at both weekly and yearly levels</li>
+</ul>
+</div>
+</div>
+</div>
+<section id="the-budget-results-relationship-diminishing-returns" class="level3">
+<h3 class="anchored" data-anchor-id="the-budget-results-relationship-diminishing-returns">The Budget-Results Relationship: Diminishing Returns</h3>
+<p>The relationship between budget and results (clicks/impressions) is clearly non-linear:</p>
+<ul>
+<li><strong>Initial slow growth</strong>: At low budget levels (100-200), each additional dollar yields modest increases</li>
+<li><strong>Acceleration phase</strong>: At middle budget ranges (200-300), returns improve</li>
+<li><strong>Diminishing returns</strong>: At higher levels (400+), additional spending faces decreasing efficiency</li>
+<li><strong>Variability</strong>: Even at the same budget level, results vary due to seasonal factors</li>
+</ul>
+<p>This non-linear pattern reflects real-world marketplace dynamics, where competition and saturation limit the effectiveness of additional spending.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Budget-Impressions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Click Response to Budget</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div id="cell-fig-imp-response" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-imp-response" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-imp-response-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-imp-response-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-imp-response-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Observed relationship between budget and impressions.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div id="cell-fig-click-response" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-click-response" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-click-response-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-click-response-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-click-response-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Observed relationship between budget and observed clicks.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="the-model-structure-four-interconnected-components" class="level2">
+<h2 class="anchored" data-anchor-id="the-model-structure-four-interconnected-components">The Model Structure: Four Interconnected Components</h2>
+<p>Our forecasting system models this process through 4 interconnected components, each with its own statistical approach:</p>
+<ol type="1">
+<li><strong>Defining Inputs and Statistical Controls</strong>
+<ul>
+<li>Build components for <strong>seasonality</strong> and <strong>trends</strong></li>
+<li>Account for different base levels for different <strong>geographies</strong></li>
+<li>Add noise to account for shocks</li>
+</ul></li>
+<li><strong>Search Volume Forecasting</strong>
+<ul>
+<li>Projects underlying market demand independent of your advertising</li>
+<li>Accounts for both weekly cycles and yearly seasonality</li>
+<li>Adjusts for geographic differences in search behavior</li>
+</ul></li>
+<li><strong>Impression Generation</strong>
+<ul>
+<li>Models how your budget converts search volume into impressions</li>
+<li>Captures the “hill function” effect where budget increases face diminishing returns</li>
+<li>Identifies periods of zero impressions when budget is paused</li>
+</ul></li>
+<li><strong>Click-Through Prediction</strong>
+<ul>
+<li>Estimates conversion from impressions to valuable clicks</li>
+<li>Accounts for seasonal variations in consumer engagement</li>
+<li>Reflects geographic differences in click behavior</li>
+</ul></li>
+</ol>
+<section id="defining-inputs-and-statistical-controls" class="level3">
+<h3 class="anchored" data-anchor-id="defining-inputs-and-statistical-controls">1. Defining Inputs and Statistical Controls</h3>
+<p>Looking at the causal graph (<a href="#fig-causal-graph" class="quarto-xref">Figure&nbsp;1</a>), we can see how information flows through the model:</p>
+<ol type="1">
+<li><strong>External Factors First</strong>: Time and geography are the foundation variables that influence everything else</li>
+<li><strong>Search Volume Generation</strong>: These external factors determine how many people search for relevant terms</li>
+<li><strong>Budget Allocation</strong>: Your marketing spend determines what portion of searches become impressions</li>
+<li><strong>Conversion Process</strong>: Impressions then convert to clicks based on various factors</li>
+</ol>
+<p>This structure accurately represents real-world advertising dynamics where you can control your budget but not consumer search behavior.</p>
+<div id="cell-30" class="cell">
+<div id="lst-data" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;1: Define the main inputs to the model for this example only time and budget are used.
+</figcaption>
+<div aria-describedby="lst-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-data"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-data-1"><a href="#lst-data-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Date to be used as a time index in the model </span></span>
+<span id="lst-data-2"><a href="#lst-data-2" aria-hidden="true" tabindex="-1"></a>time_data <span class="op">=</span> Data(<span class="st">'time'</span>, dims<span class="op">=</span>(<span class="st">'date'</span>)) </span>
+<span id="lst-data-3"><a href="#lst-data-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-data-4"><a href="#lst-data-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Budget to be used as a covariate in the model</span></span>
+<span id="lst-data-5"><a href="#lst-data-5" aria-hidden="true" tabindex="-1"></a>budget_data <span class="op">=</span> Data(<span class="st">'budget'</span>, dims<span class="op">=</span>(<span class="st">'date'</span>, <span class="st">'geo'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<p>Statistical controls can be used when data or theory is not available to ascribe cause to any particular variable. They allow use to seperate noise and things outside our control from the factors we are interested in studying (budget allocation). If theory suggests other explanatory variables for which data is available that explain the variation in the data they should be used instead.</p>
+<div id="cell-32" class="cell">
+<div id="lst-long-term-periodic" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored" data-code-fold="true">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-long-term-periodic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;2: Define a long-term periodicity prior for the model.
+</figcaption>
+<div aria-describedby="lst-long-term-periodic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-long-term-periodic" data-code-fold="true"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-long-term-periodic-1"><a href="#lst-long-term-periodic-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Length scale prior for the long-term periodicity</span></span>
+<span id="lst-long-term-periodic-2"><a href="#lst-long-term-periodic-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The length scale defines the smoothness of the periodic function</span></span>
+<span id="lst-long-term-periodic-3"><a href="#lst-long-term-periodic-3" aria-hidden="true" tabindex="-1"></a><span class="co"># A small length scale means that the function will vary quickly, </span></span>
+<span id="lst-long-term-periodic-4"><a href="#lst-long-term-periodic-4" aria-hidden="true" tabindex="-1"></a><span class="co"># while a large length scale means that the function will vary slowly</span></span>
+<span id="lst-long-term-periodic-5"><a href="#lst-long-term-periodic-5" aria-hidden="true" tabindex="-1"></a><span class="co"># The length scale is a hyperparameter that can be learned from the data</span></span>
+<span id="lst-long-term-periodic-6"><a href="#lst-long-term-periodic-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Because the length scale is positive, we use a gamma prior</span></span>
+<span id="lst-long-term-periodic-7"><a href="#lst-long-term-periodic-7" aria-hidden="true" tabindex="-1"></a>ls_long_periodic <span class="op">=</span> Prior(</span>
+<span id="lst-long-term-periodic-8"><a href="#lst-long-term-periodic-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ls_lp'</span>, </span>
+<span id="lst-long-term-periodic-9"><a href="#lst-long-term-periodic-9" aria-hidden="true" tabindex="-1"></a>    prior_name<span class="op">=</span><span class="st">"Gamma"</span>, </span>
+<span id="lst-long-term-periodic-10"><a href="#lst-long-term-periodic-10" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="dv">1</span>, </span>
+<span id="lst-long-term-periodic-11"><a href="#lst-long-term-periodic-11" aria-hidden="true" tabindex="-1"></a>    beta<span class="op">=</span><span class="dv">1</span><span class="op">/</span><span class="dv">5</span></span>
+<span id="lst-long-term-periodic-12"><a href="#lst-long-term-periodic-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="lst-long-term-periodic-13"><a href="#lst-long-term-periodic-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-long-term-periodic-14"><a href="#lst-long-term-periodic-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Scale prior for the long-term periodicity</span></span>
+<span id="lst-long-term-periodic-15"><a href="#lst-long-term-periodic-15" aria-hidden="true" tabindex="-1"></a><span class="co"># The scale defines the amplitude of the periodic function</span></span>
+<span id="lst-long-term-periodic-16"><a href="#lst-long-term-periodic-16" aria-hidden="true" tabindex="-1"></a><span class="co"># A small scale means that the function will be small,</span></span>
+<span id="lst-long-term-periodic-17"><a href="#lst-long-term-periodic-17" aria-hidden="true" tabindex="-1"></a><span class="co"># while a large scale means that the function will be large</span></span>
+<span id="lst-long-term-periodic-18"><a href="#lst-long-term-periodic-18" aria-hidden="true" tabindex="-1"></a><span class="co"># The scale is a hyperparameter that can be learned from the data</span></span>
+<span id="lst-long-term-periodic-19"><a href="#lst-long-term-periodic-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Because the scale is positive and it may be large, we use an exponential prior</span></span>
+<span id="lst-long-term-periodic-20"><a href="#lst-long-term-periodic-20" aria-hidden="true" tabindex="-1"></a>scale_long_periodic <span class="op">=</span> Prior(</span>
+<span id="lst-long-term-periodic-21"><a href="#lst-long-term-periodic-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">'scale_lp'</span>,</span>
+<span id="lst-long-term-periodic-22"><a href="#lst-long-term-periodic-22" aria-hidden="true" tabindex="-1"></a>    prior_name<span class="op">=</span><span class="st">"Exponential"</span>,</span>
+<span id="lst-long-term-periodic-23"><a href="#lst-long-term-periodic-23" aria-hidden="true" tabindex="-1"></a>    lam<span class="op">=</span><span class="dv">1</span><span class="op">/</span><span class="fl">100.0</span>)</span>
+<span id="lst-long-term-periodic-24"><a href="#lst-long-term-periodic-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-long-term-periodic-25"><a href="#lst-long-term-periodic-25" aria-hidden="true" tabindex="-1"></a><span class="co"># A Gaussian process prior for the long-term periodicity</span></span>
+<span id="lst-long-term-periodic-26"><a href="#lst-long-term-periodic-26" aria-hidden="true" tabindex="-1"></a><span class="co"># This prior is used to model time-varying effects</span></span>
+<span id="lst-long-term-periodic-27"><a href="#lst-long-term-periodic-27" aria-hidden="true" tabindex="-1"></a><span class="co"># This allows for the model to capture long-term trends in the data</span></span>
+<span id="lst-long-term-periodic-28"><a href="#lst-long-term-periodic-28" aria-hidden="true" tabindex="-1"></a>long_periodic <span class="op">=</span> HSGPPeriodic(</span>
+<span id="lst-long-term-periodic-29"><a href="#lst-long-term-periodic-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"long_term_periodic"</span>,</span>
+<span id="lst-long-term-periodic-30"><a href="#lst-long-term-periodic-30" aria-hidden="true" tabindex="-1"></a>    m<span class="op">=</span><span class="dv">40</span>, <span class="co"># Rank of the GP approximation</span></span>
+<span id="lst-long-term-periodic-31"><a href="#lst-long-term-periodic-31" aria-hidden="true" tabindex="-1"></a>    ls<span class="op">=</span>ls_long_periodic,</span>
+<span id="lst-long-term-periodic-32"><a href="#lst-long-term-periodic-32" aria-hidden="true" tabindex="-1"></a>    scale<span class="op">=</span>scale_long_periodic,</span>
+<span id="lst-long-term-periodic-33"><a href="#lst-long-term-periodic-33" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span>(<span class="st">'date'</span>, <span class="st">'geo'</span>), <span class="co"># Varies by date and geo</span></span>
+<span id="lst-long-term-periodic-34"><a href="#lst-long-term-periodic-34" aria-hidden="true" tabindex="-1"></a>    period<span class="op">=</span><span class="dv">365</span> <span class="co"># yearly </span></span>
+<span id="lst-long-term-periodic-35"><a href="#lst-long-term-periodic-35" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<div id="cell-33" class="cell">
+<div id="lst-long-term-periodic-ctr" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-long-term-periodic-ctr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;3: Define a long-term periodicity prior for click-through-rate (CTR). This allows for the model to capture long-term trends in the CTR data separately from the impressions data.
+</figcaption>
+<div aria-describedby="lst-long-term-periodic-ctr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-long-term-periodic-ctr"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-long-term-periodic-ctr-1"><a href="#lst-long-term-periodic-ctr-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hyperparameters for the long-term periodicity prior for CTR</span></span>
+<span id="lst-long-term-periodic-ctr-2"><a href="#lst-long-term-periodic-ctr-2" aria-hidden="true" tabindex="-1"></a>ls_long_periodic_ctr <span class="op">=</span> Prior(</span>
+<span id="lst-long-term-periodic-ctr-3"><a href="#lst-long-term-periodic-ctr-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ls_lp_ctr"</span>,</span>
+<span id="lst-long-term-periodic-ctr-4"><a href="#lst-long-term-periodic-ctr-4" aria-hidden="true" tabindex="-1"></a>    prior_name<span class="op">=</span><span class="st">"Gamma"</span>, </span>
+<span id="lst-long-term-periodic-ctr-5"><a href="#lst-long-term-periodic-ctr-5" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="dv">1</span>, </span>
+<span id="lst-long-term-periodic-ctr-6"><a href="#lst-long-term-periodic-ctr-6" aria-hidden="true" tabindex="-1"></a>    beta<span class="op">=</span><span class="dv">1</span><span class="op">/</span><span class="dv">5</span></span>
+<span id="lst-long-term-periodic-ctr-7"><a href="#lst-long-term-periodic-ctr-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="lst-long-term-periodic-ctr-8"><a href="#lst-long-term-periodic-ctr-8" aria-hidden="true" tabindex="-1"></a>scale_long_periodic_ctr <span class="op">=</span> Prior(</span>
+<span id="lst-long-term-periodic-ctr-9"><a href="#lst-long-term-periodic-ctr-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"scale_lp_ctr"</span>, </span>
+<span id="lst-long-term-periodic-ctr-10"><a href="#lst-long-term-periodic-ctr-10" aria-hidden="true" tabindex="-1"></a>    prior_name<span class="op">=</span><span class="st">"Exponential"</span>, </span>
+<span id="lst-long-term-periodic-ctr-11"><a href="#lst-long-term-periodic-ctr-11" aria-hidden="true" tabindex="-1"></a>    lam<span class="op">=</span><span class="dv">1</span></span>
+<span id="lst-long-term-periodic-ctr-12"><a href="#lst-long-term-periodic-ctr-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="lst-long-term-periodic-ctr-13"><a href="#lst-long-term-periodic-ctr-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-long-term-periodic-ctr-14"><a href="#lst-long-term-periodic-ctr-14" aria-hidden="true" tabindex="-1"></a>long_periodic_ctr <span class="op">=</span> HSGPPeriodic(</span>
+<span id="lst-long-term-periodic-ctr-15"><a href="#lst-long-term-periodic-ctr-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"long_term_periodic_ctr"</span>,</span>
+<span id="lst-long-term-periodic-ctr-16"><a href="#lst-long-term-periodic-ctr-16" aria-hidden="true" tabindex="-1"></a>    m<span class="op">=</span><span class="dv">40</span>,</span>
+<span id="lst-long-term-periodic-ctr-17"><a href="#lst-long-term-periodic-ctr-17" aria-hidden="true" tabindex="-1"></a>    ls<span class="op">=</span>ls_long_periodic_ctr,</span>
+<span id="lst-long-term-periodic-ctr-18"><a href="#lst-long-term-periodic-ctr-18" aria-hidden="true" tabindex="-1"></a>    scale<span class="op">=</span>scale_long_periodic_ctr,</span>
+<span id="lst-long-term-periodic-ctr-19"><a href="#lst-long-term-periodic-ctr-19" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span>(<span class="st">'date'</span>, <span class="st">'geo'</span>),</span>
+<span id="lst-long-term-periodic-ctr-20"><a href="#lst-long-term-periodic-ctr-20" aria-hidden="true" tabindex="-1"></a>    period<span class="op">=</span><span class="dv">365</span> <span class="co"># yearly</span></span>
+<span id="lst-long-term-periodic-ctr-21"><a href="#lst-long-term-periodic-ctr-21" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<div id="cell-34" class="cell">
+<div id="lst-weekly-periodic" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-weekly-periodic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;4: Define a weekly periodicity prior for the model. Fourier basis functions are used to model the weekly periodicity.
+</figcaption>
+<div aria-describedby="lst-weekly-periodic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-weekly-periodic"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-weekly-periodic-1"><a href="#lst-weekly-periodic-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Weekly periodic component</span></span>
+<span id="lst-weekly-periodic-2"><a href="#lst-weekly-periodic-2" aria-hidden="true" tabindex="-1"></a>weekly_periodic <span class="op">=</span> WeeklyFourier(</span>
+<span id="lst-weekly-periodic-3"><a href="#lst-weekly-periodic-3" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">'weekly_periodic'</span>,</span>
+<span id="lst-weekly-periodic-4"><a href="#lst-weekly-periodic-4" aria-hidden="true" tabindex="-1"></a>    n_order<span class="op">=</span><span class="dv">3</span>, <span class="co"># Number of Fourier basis functions to use</span></span>
+<span id="lst-weekly-periodic-5"><a href="#lst-weekly-periodic-5" aria-hidden="true" tabindex="-1"></a>    prefix<span class="op">=</span><span class="st">'weekly_search_volume'</span>,</span>
+<span id="lst-weekly-periodic-6"><a href="#lst-weekly-periodic-6" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span>(<span class="st">'date'</span>,)</span>
+<span id="lst-weekly-periodic-7"><a href="#lst-weekly-periodic-7" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<div id="cell-35" class="cell">
+<div id="lst-short-term-periodic-ctr" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-short-term-periodic-ctr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;5: Define a short-term periodicity prior for CTR. Assumes a weekly periodicity which may be different from the weekly periodicity of the impressions.
+</figcaption>
+<div aria-describedby="lst-short-term-periodic-ctr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-short-term-periodic-ctr"><pre class="sourceCode code-annotation-code python code-with-copy"><code class="sourceCode python"><span id="lst-short-term-periodic-ctr-1"><a href="#lst-short-term-periodic-ctr-1" aria-hidden="true" tabindex="-1"></a>ls_short_periodic <span class="op">=</span> Prior(<span class="st">"ls_sp"</span>, prior_name<span class="op">=</span><span class="st">"Gamma"</span>, alpha<span class="op">=</span><span class="dv">1</span>, beta<span class="op">=</span><span class="dv">1</span><span class="op">/</span><span class="dv">30</span>)</span>
+<span id="lst-short-term-periodic-ctr-2"><a href="#lst-short-term-periodic-ctr-2" aria-hidden="true" tabindex="-1"></a>scale_short_periodic <span class="op">=</span> Prior(<span class="st">"scale_sp"</span>, prior_name<span class="op">=</span><span class="st">"Exponential"</span>, lam<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="lst-short-term-periodic-ctr-3"><a href="#lst-short-term-periodic-ctr-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-short-term-periodic-ctr-4"><a href="#lst-short-term-periodic-ctr-4" aria-hidden="true" tabindex="-1"></a>short_periodic_ctr<span class="op">=</span> HSGPPeriodic(</span>
+<span id="lst-short-term-periodic-ctr-5"><a href="#lst-short-term-periodic-ctr-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"short_term_periodic_ctr"</span>,</span>
+<span id="lst-short-term-periodic-ctr-6"><a href="#lst-short-term-periodic-ctr-6" aria-hidden="true" tabindex="-1"></a>    m<span class="op">=</span><span class="dv">40</span>,</span>
+<span id="lst-short-term-periodic-ctr-7"><a href="#lst-short-term-periodic-ctr-7" aria-hidden="true" tabindex="-1"></a>    ls<span class="op">=</span>ls_long_periodic,</span>
+<span id="lst-short-term-periodic-ctr-8"><a href="#lst-short-term-periodic-ctr-8" aria-hidden="true" tabindex="-1"></a>    scale<span class="op">=</span>scale_long_periodic,</span>
+<span id="lst-short-term-periodic-ctr-9"><a href="#lst-short-term-periodic-ctr-9" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span>(<span class="st">'date'</span>, <span class="st">'geo'</span>),</span>
+<span id="lst-short-term-periodic-ctr-10"><a href="#lst-short-term-periodic-ctr-10" aria-hidden="true" tabindex="-1"></a>    period<span class="op">=</span><span class="dv">7</span> <span class="co"># weekly</span></span>
+<span id="lst-short-term-periodic-ctr-11"><a href="#lst-short-term-periodic-ctr-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<div id="cell-36" class="cell">
+<div id="lst-geo-effects-volume" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-geo-effects-volume-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;6: Define a hierarchical prior for geographic effects for the search volume. This allows for the model to capture geographic effects in the search volume data.
+</figcaption>
+<div aria-describedby="lst-geo-effects-volume-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-geo-effects-volume"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-geo-effects-volume-1"><a href="#lst-geo-effects-volume-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Average search volume over all geographies</span></span>
+<span id="lst-geo-effects-volume-2"><a href="#lst-geo-effects-volume-2" aria-hidden="true" tabindex="-1"></a>mean_search_volume <span class="op">=</span> Prior(</span>
+<span id="lst-geo-effects-volume-3"><a href="#lst-geo-effects-volume-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"base_volume_mu"</span>, </span>
+<span id="lst-geo-effects-volume-4"><a href="#lst-geo-effects-volume-4" aria-hidden="true" tabindex="-1"></a>            prior_name<span class="op">=</span><span class="st">"Normal"</span>, </span>
+<span id="lst-geo-effects-volume-5"><a href="#lst-geo-effects-volume-5" aria-hidden="true" tabindex="-1"></a>            mu<span class="op">=</span><span class="dv">22000</span>, </span>
+<span id="lst-geo-effects-volume-6"><a href="#lst-geo-effects-volume-6" aria-hidden="true" tabindex="-1"></a>            sigma<span class="op">=</span><span class="dv">8000</span></span>
+<span id="lst-geo-effects-volume-7"><a href="#lst-geo-effects-volume-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="lst-geo-effects-volume-8"><a href="#lst-geo-effects-volume-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-geo-effects-volume-9"><a href="#lst-geo-effects-volume-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Hyperparameters for the amount of pooling between geographies</span></span>
+<span id="lst-geo-effects-volume-10"><a href="#lst-geo-effects-volume-10" aria-hidden="true" tabindex="-1"></a>amount_of_pooling_volume <span class="op">=</span> Prior(</span>
+<span id="lst-geo-effects-volume-11"><a href="#lst-geo-effects-volume-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"base_volume_sigma"</span>, </span>
+<span id="lst-geo-effects-volume-12"><a href="#lst-geo-effects-volume-12" aria-hidden="true" tabindex="-1"></a>        prior_name<span class="op">=</span><span class="st">"HalfNormal"</span>, </span>
+<span id="lst-geo-effects-volume-13"><a href="#lst-geo-effects-volume-13" aria-hidden="true" tabindex="-1"></a>        sigma<span class="op">=</span><span class="dv">500</span></span>
+<span id="lst-geo-effects-volume-14"><a href="#lst-geo-effects-volume-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="lst-geo-effects-volume-15"><a href="#lst-geo-effects-volume-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-geo-effects-volume-16"><a href="#lst-geo-effects-volume-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Random effects by geo for the search volume</span></span>
+<span id="lst-geo-effects-volume-17"><a href="#lst-geo-effects-volume-17" aria-hidden="true" tabindex="-1"></a>volume_random_effects <span class="op">=</span> Prior(</span>
+<span id="lst-geo-effects-volume-18"><a href="#lst-geo-effects-volume-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">"base_volume_random_effects"</span>,</span>
+<span id="lst-geo-effects-volume-19"><a href="#lst-geo-effects-volume-19" aria-hidden="true" tabindex="-1"></a>        prior_name<span class="op">=</span><span class="st">"Normal"</span>,</span>
+<span id="lst-geo-effects-volume-20"><a href="#lst-geo-effects-volume-20" aria-hidden="true" tabindex="-1"></a>        mu<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="lst-geo-effects-volume-21"><a href="#lst-geo-effects-volume-21" aria-hidden="true" tabindex="-1"></a>        sigma<span class="op">=</span>amount_of_pooling_volume,</span>
+<span id="lst-geo-effects-volume-22"><a href="#lst-geo-effects-volume-22" aria-hidden="true" tabindex="-1"></a>        dims<span class="op">=</span>(<span class="st">'geo'</span>,)</span>
+<span id="lst-geo-effects-volume-23"><a href="#lst-geo-effects-volume-23" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="lst-geo-effects-volume-24"><a href="#lst-geo-effects-volume-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-geo-effects-volume-25"><a href="#lst-geo-effects-volume-25" aria-hidden="true" tabindex="-1"></a>base_volume <span class="op">=</span> (mean_search_volume <span class="op">+</span> volume_random_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<div id="cell-37" class="cell">
+<div id="lst-volume-shocks" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-volume-shocks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;7: Search volume may be affected by shocks. These are small random variations in the search volume data at the day and geo level.
+</figcaption>
+<div aria-describedby="lst-volume-shocks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-volume-shocks"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-volume-shocks-1"><a href="#lst-volume-shocks-1" aria-hidden="true" tabindex="-1"></a>daily_geo_shocks_search_volume <span class="op">=</span> Prior(</span>
+<span id="lst-volume-shocks-2"><a href="#lst-volume-shocks-2" aria-hidden="true" tabindex="-1"></a>        <span class="st">"daily_geo_shocks_search_volume"</span>,</span>
+<span id="lst-volume-shocks-3"><a href="#lst-volume-shocks-3" aria-hidden="true" tabindex="-1"></a>        prior_name<span class="op">=</span><span class="st">"Normal"</span>, </span>
+<span id="lst-volume-shocks-4"><a href="#lst-volume-shocks-4" aria-hidden="true" tabindex="-1"></a>        mu<span class="op">=</span><span class="dv">0</span>, </span>
+<span id="lst-volume-shocks-5"><a href="#lst-volume-shocks-5" aria-hidden="true" tabindex="-1"></a>        sigma<span class="op">=</span>Prior(</span>
+<span id="lst-volume-shocks-6"><a href="#lst-volume-shocks-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"daily_geo_shocks_search_volume_scale"</span>, </span>
+<span id="lst-volume-shocks-7"><a href="#lst-volume-shocks-7" aria-hidden="true" tabindex="-1"></a>            prior_name<span class="op">=</span><span class="st">"HalfCauchy"</span>, </span>
+<span id="lst-volume-shocks-8"><a href="#lst-volume-shocks-8" aria-hidden="true" tabindex="-1"></a>            beta<span class="op">=</span><span class="dv">1</span></span>
+<span id="lst-volume-shocks-9"><a href="#lst-volume-shocks-9" aria-hidden="true" tabindex="-1"></a>        ), </span>
+<span id="lst-volume-shocks-10"><a href="#lst-volume-shocks-10" aria-hidden="true" tabindex="-1"></a>        dims<span class="op">=</span>(<span class="st">'date'</span>, <span class="st">'geo'</span>)</span>
+<span id="lst-volume-shocks-11"><a href="#lst-volume-shocks-11" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+<section id="search-volume-component" class="level3">
+<h3 class="anchored" data-anchor-id="search-volume-component">2. Search Volume Component</h3>
+<p>This predicts the underlying market demand:</p>
+<ul>
+<li><strong>Base Volume</strong>: A normal distribution representing the average search volume for each geographic region <a href="#lst-geo-effects-volume" class="quarto-xref">Code&nbsp;6</a></li>
+<li><strong>Temporal Patterns</strong>:
+<ul>
+<li>Weekly seasonal components (captured by Fourier series <a href="#lst-weekly-periodic" class="quarto-xref">Code&nbsp;4</a>)</li>
+<li>Long-term periodic components (captured by Hilbert Space Gaussian Processes <a href="#lst-long-term-periodic" class="quarto-xref">Code&nbsp;2</a>)</li>
+</ul></li>
+<li><strong>Geographic Variations</strong>: Random effects that account for differences between markets <a href="#lst-geo-effects-volume" class="quarto-xref">Code&nbsp;6</a></li>
+<li><strong>Daily Shocks</strong>: Random variations that capture unexpected search behavior fluctuations <a href="#lst-volume-shocks" class="quarto-xref">Code&nbsp;7</a></li>
+</ul>
+<p>The model assumes search volume follows a Poisson distribution, which is ideal for count data and allows for appropriate variance as volume increases. <a href="#lst-search-volume-model-obs" class="quarto-xref">Code&nbsp;9</a></p>
+<div id="cell-39" class="cell">
+<div id="lst-search-volume-model" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-search-volume-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;8: Define the model for the mean search volume. This is a linear model with a long-term periodicity, weekly periodicity, geographic effects and daily shocks.
+</figcaption>
+<div aria-describedby="lst-search-volume-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-search-volume-model"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-search-volume-model-1"><a href="#lst-search-volume-model-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The mean search volume must be positive, so we use a softplus transformation </span></span>
+<span id="lst-search-volume-model-2"><a href="#lst-search-volume-model-2" aria-hidden="true" tabindex="-1"></a><span class="co"># an exponential transformation could also be used but then all the priors must be </span></span>
+<span id="lst-search-volume-model-3"><a href="#lst-search-volume-model-3" aria-hidden="true" tabindex="-1"></a><span class="co"># in the log domain</span></span>
+<span id="lst-search-volume-model-4"><a href="#lst-search-volume-model-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The softplus transformation is a smooth approximation of the ReLU function</span></span>
+<span id="lst-search-volume-model-5"><a href="#lst-search-volume-model-5" aria-hidden="true" tabindex="-1"></a>search_volume_lam <span class="op">=</span> ((</span>
+<span id="lst-search-volume-model-6"><a href="#lst-search-volume-model-6" aria-hidden="true" tabindex="-1"></a>    long_periodic </span>
+<span id="lst-search-volume-model-7"><a href="#lst-search-volume-model-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> weekly_periodic</span>
+<span id="lst-search-volume-model-8"><a href="#lst-search-volume-model-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> base_volume</span>
+<span id="lst-search-volume-model-9"><a href="#lst-search-volume-model-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> daily_geo_shocks_search_volume</span>
+<span id="lst-search-volume-model-10"><a href="#lst-search-volume-model-10" aria-hidden="true" tabindex="-1"></a>    )(time_data)).transform(pt.softplus)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<div id="cell-40" class="cell">
+<div id="lst-search-volume-model-obs" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-search-volume-model-obs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;9: Define the model for the observed search volume. This is a Poisson distribution with a mean defined by the search volume model.
+</figcaption>
+<div aria-describedby="lst-search-volume-model-obs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-search-volume-model-obs"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-search-volume-model-obs-1"><a href="#lst-search-volume-model-obs-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pm.Model(coords<span class="op">=</span>coords) <span class="im">as</span> search_model:</span>
+<span id="lst-search-volume-model-obs-2"><a href="#lst-search-volume-model-obs-2" aria-hidden="true" tabindex="-1"></a>    lam <span class="op">=</span> handle_dims(</span>
+<span id="lst-search-volume-model-obs-3"><a href="#lst-search-volume-model-obs-3" aria-hidden="true" tabindex="-1"></a>        search_volume_lam.<span class="bu">apply</span>(time_index), </span>
+<span id="lst-search-volume-model-obs-4"><a href="#lst-search-volume-model-obs-4" aria-hidden="true" tabindex="-1"></a>        search_volume_lam._dims, </span>
+<span id="lst-search-volume-model-obs-5"><a href="#lst-search-volume-model-obs-5" aria-hidden="true" tabindex="-1"></a>        (<span class="st">"date"</span>, <span class="st">"geo"</span>)</span>
+<span id="lst-search-volume-model-obs-6"><a href="#lst-search-volume-model-obs-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="lst-search-volume-model-obs-7"><a href="#lst-search-volume-model-obs-7" aria-hidden="true" tabindex="-1"></a>    search_volume_obs <span class="op">=</span> pm.Poisson(</span>
+<span id="lst-search-volume-model-obs-8"><a href="#lst-search-volume-model-obs-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"search_volume_obs"</span>,</span>
+<span id="lst-search-volume-model-obs-9"><a href="#lst-search-volume-model-obs-9" aria-hidden="true" tabindex="-1"></a>        mu<span class="op">=</span>lam,</span>
+<span id="lst-search-volume-model-obs-10"><a href="#lst-search-volume-model-obs-10" aria-hidden="true" tabindex="-1"></a>        dims<span class="op">=</span>(<span class="st">"date"</span>, <span class="st">"geo"</span>),</span>
+<span id="lst-search-volume-model-obs-11"><a href="#lst-search-volume-model-obs-11" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Key assumptions and justifications:
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Poisson distribution</strong> for search volume: Appropriate for count data with variance proportional to the mean</li>
+<li><strong>Gaussian Process priors</strong> for seasonality: Allows flexible modeling of complex patterns without rigid assumptions</li>
+<li><strong>Hierarchical structure</strong> for geographic effects: Shares information across regions while allowing for differences</li>
+<li><strong>Additive components</strong>: Each factor (weekly patterns, yearly seasonality, etc.) contributes independently to the overall trend</li>
+</ul>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Simulated Search Volume</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Average Simulated Search Volume and Prediction Interval</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div id="cell-fig-model-simulated-search-volume" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-model-simulated-search-volume" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-model-simulated-search-volume-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-model-simulated-search-volume-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-model-simulated-search-volume-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: Simulated search volume from the model.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div id="cell-fig-model-average-search-volume" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-model-average-search-volume" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-model-average-search-volume-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-model-average-search-volume-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-model-average-search-volume-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: Simulated search volume from the model.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="impression-generation-model" class="level3">
+<h3 class="anchored" data-anchor-id="impression-generation-model">3. Impression Generation Model</h3>
+<p>This component converts search volume to impressions based on your budget:</p>
+<ul>
+<li><strong>Budget Effect</strong>: Uses a weighted hill function (shown in the code as <code>budget_transform(multiplier, competitor_pressure, budget)</code> <a href="#lst-nonlinear-transform" class="quarto-xref">Code&nbsp;11</a>)</li>
+<li><strong>Competitor Pressure</strong>: A Half-Cauchy distribution parameter that models how difficult it is to win impressions <a href="#lst-budget-model-priors" class="quarto-xref">Code&nbsp;10</a></li>
+<li><strong>Impression Rate</strong>: The probability that a search will result in your ad being shown <a href="#lst-impression-rate-model" class="quarto-xref">Code&nbsp;12</a></li>
+<li><strong>Final Impressions</strong>: Modeled as a Binomial distribution (either shown or not shown) <a href="#lst-obs-impression-model" class="quarto-xref">Code&nbsp;13</a></li>
+</ul>
+<p>This structure captures the diminishing returns seen in <a href="#fig-imp-response" class="quarto-xref">Figure&nbsp;6</a>, <a href="#fig-click-response" class="quarto-xref">Figure&nbsp;7</a>, where doubling your budget doesn’t double your results.</p>
+<div id="cell-49" class="cell">
+<div id="lst-budget-model-priors" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-budget-model-priors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;10: Define the priors for the budget model.
+</figcaption>
+<div aria-describedby="lst-budget-model-priors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-budget-model-priors"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-budget-model-priors-1"><a href="#lst-budget-model-priors-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The max precentage of search volume that can be converted to impressions</span></span>
+<span id="lst-budget-model-priors-2"><a href="#lst-budget-model-priors-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Must be between 0 and 1</span></span>
+<span id="lst-budget-model-priors-3"><a href="#lst-budget-model-priors-3" aria-hidden="true" tabindex="-1"></a>multiplier <span class="op">=</span> Prior(</span>
+<span id="lst-budget-model-priors-4"><a href="#lst-budget-model-priors-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"search_volume_multiplier"</span>, </span>
+<span id="lst-budget-model-priors-5"><a href="#lst-budget-model-priors-5" aria-hidden="true" tabindex="-1"></a>    prior_name<span class="op">=</span><span class="st">"Beta"</span>, </span>
+<span id="lst-budget-model-priors-6"><a href="#lst-budget-model-priors-6" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.5</span>, </span>
+<span id="lst-budget-model-priors-7"><a href="#lst-budget-model-priors-7" aria-hidden="true" tabindex="-1"></a>    beta<span class="op">=</span><span class="fl">0.5</span>, </span>
+<span id="lst-budget-model-priors-8"><a href="#lst-budget-model-priors-8" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span><span class="bu">tuple</span>()</span>
+<span id="lst-budget-model-priors-9"><a href="#lst-budget-model-priors-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="lst-budget-model-priors-10"><a href="#lst-budget-model-priors-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-budget-model-priors-11"><a href="#lst-budget-model-priors-11" aria-hidden="true" tabindex="-1"></a><span class="co"># The average competitive pressure for bidded keywords</span></span>
+<span id="lst-budget-model-priors-12"><a href="#lst-budget-model-priors-12" aria-hidden="true" tabindex="-1"></a><span class="co"># This can be modeled by keword category, by geo and time</span></span>
+<span id="lst-budget-model-priors-13"><a href="#lst-budget-model-priors-13" aria-hidden="true" tabindex="-1"></a><span class="co"># It is assumed constant for simplicity</span></span>
+<span id="lst-budget-model-priors-14"><a href="#lst-budget-model-priors-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Must be positive but can be large</span></span>
+<span id="lst-budget-model-priors-15"><a href="#lst-budget-model-priors-15" aria-hidden="true" tabindex="-1"></a>competitor_pressure <span class="op">=</span> Prior(</span>
+<span id="lst-budget-model-priors-16"><a href="#lst-budget-model-priors-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"competitor_pressure"</span>, </span>
+<span id="lst-budget-model-priors-17"><a href="#lst-budget-model-priors-17" aria-hidden="true" tabindex="-1"></a>    prior_name<span class="op">=</span><span class="st">"HalfCauchy"</span>, </span>
+<span id="lst-budget-model-priors-18"><a href="#lst-budget-model-priors-18" aria-hidden="true" tabindex="-1"></a>    beta<span class="op">=</span><span class="dv">1</span>, </span>
+<span id="lst-budget-model-priors-19"><a href="#lst-budget-model-priors-19" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span><span class="bu">tuple</span>()</span>
+<span id="lst-budget-model-priors-20"><a href="#lst-budget-model-priors-20" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<div id="cell-50" class="cell">
+<div id="lst-nonlinear-transform" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-nonlinear-transform-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;11: Define a nonlinear hill transformation for the budget model.
+</figcaption>
+<div aria-describedby="lst-nonlinear-transform-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-nonlinear-transform"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-nonlinear-transform-1"><a href="#lst-nonlinear-transform-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> budget_transform(multiplier, competitor_pressure, budget):</span>
+<span id="lst-nonlinear-transform-2"><a href="#lst-nonlinear-transform-2" aria-hidden="true" tabindex="-1"></a>    numerator <span class="op">=</span> multiplier <span class="op">*</span> budget</span>
+<span id="lst-nonlinear-transform-3"><a href="#lst-nonlinear-transform-3" aria-hidden="true" tabindex="-1"></a>    denominator <span class="op">=</span> budget <span class="op">+</span> competitor_pressure</span>
+<span id="lst-nonlinear-transform-4"><a href="#lst-nonlinear-transform-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> numerator <span class="op">/</span> denominator</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<div id="cell-51" class="cell">
+<div id="lst-impression-rate-model" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-impression-rate-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;12: Define the model for the impression rate. This is a nonlinear transformation of the budget data.
+</figcaption>
+<div aria-describedby="lst-impression-rate-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-impression-rate-model"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-impression-rate-model-1"><a href="#lst-impression-rate-model-1" aria-hidden="true" tabindex="-1"></a>impression_rate <span class="op">=</span> budget_transform(</span>
+<span id="lst-impression-rate-model-2"><a href="#lst-impression-rate-model-2" aria-hidden="true" tabindex="-1"></a>    multiplier<span class="op">=</span>multiplier,</span>
+<span id="lst-impression-rate-model-3"><a href="#lst-impression-rate-model-3" aria-hidden="true" tabindex="-1"></a>    competitor_pressure<span class="op">=</span>competitor_pressure,</span>
+<span id="lst-impression-rate-model-4"><a href="#lst-impression-rate-model-4" aria-hidden="true" tabindex="-1"></a>    budget<span class="op">=</span>budget_data</span>
+<span id="lst-impression-rate-model-5"><a href="#lst-impression-rate-model-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<div id="cell-52" class="cell">
+<div id="lst-obs-impression-model" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-obs-impression-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;13: Define the model for the observed impressions.
+</figcaption>
+<div aria-describedby="lst-obs-impression-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-obs-impression-model"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-obs-impression-model-1"><a href="#lst-obs-impression-model-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> search_model:</span>
+<span id="lst-obs-impression-model-2"><a href="#lst-obs-impression-model-2" aria-hidden="true" tabindex="-1"></a>    imp_rate <span class="op">=</span> handle_dims(</span>
+<span id="lst-obs-impression-model-3"><a href="#lst-obs-impression-model-3" aria-hidden="true" tabindex="-1"></a>        impression_rate.<span class="bu">apply</span>(obs_budget_data), </span>
+<span id="lst-obs-impression-model-4"><a href="#lst-obs-impression-model-4" aria-hidden="true" tabindex="-1"></a>        impression_rate._dims, </span>
+<span id="lst-obs-impression-model-5"><a href="#lst-obs-impression-model-5" aria-hidden="true" tabindex="-1"></a>        (<span class="st">"date"</span>, <span class="st">"geo"</span>))</span>
+<span id="lst-obs-impression-model-6"><a href="#lst-obs-impression-model-6" aria-hidden="true" tabindex="-1"></a>    impressions_obs <span class="op">=</span> pm.Binomial(</span>
+<span id="lst-obs-impression-model-7"><a href="#lst-obs-impression-model-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"impressions_obs"</span>,</span>
+<span id="lst-obs-impression-model-8"><a href="#lst-obs-impression-model-8" aria-hidden="true" tabindex="-1"></a>        n<span class="op">=</span>search_volume_obs,</span>
+<span id="lst-obs-impression-model-9"><a href="#lst-obs-impression-model-9" aria-hidden="true" tabindex="-1"></a>        p<span class="op">=</span>imp_rate,</span>
+<span id="lst-obs-impression-model-10"><a href="#lst-obs-impression-model-10" aria-hidden="true" tabindex="-1"></a>        dims<span class="op">=</span>(<span class="st">"date"</span>, <span class="st">"geo"</span>),</span>
+<span id="lst-obs-impression-model-11"><a href="#lst-obs-impression-model-11" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Key assumptions and justifications:
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Hill function</strong> for budget effects: Creates an S-shaped curve that realistically models marketplace dynamics</li>
+<li><strong>Competitor pressure parameter</strong>: Captures how difficult it is to win impression share in competitive markets</li>
+<li><strong>Binomial distribution</strong> for impressions: Models the binary outcome (shown/not shown) for each potential search</li>
+<li><strong>Upper bound</strong> constrained by search volume: You can’t get more impressions than there are searches</li>
+</ul>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Prior Simulated Impressions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Average Impressions</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div id="cell-fig-model-simulated-search-impressions" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-model-simulated-search-impressions" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-model-simulated-search-impressions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-model-simulated-search-impressions-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-model-simulated-search-impressions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10: Simulated search volume from the model. Note that when budget is 0, impressions are also 0.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div id="cell-fig-model-average-impressions" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-model-average-impressions" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-model-average-impressions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-model-average-impressions-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-model-average-impressions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11: Simulated impressions from the model.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="click-through-rate-model" class="level3">
+<h3 class="anchored" data-anchor-id="click-through-rate-model">4. Click-Through Rate Model</h3>
+<p>This predicts how impressions convert to clicks:</p>
+<ul>
+<li><strong>Base CTR</strong>: The fundamental click probability <a href="#lst-ctr-model" class="quarto-xref">Code&nbsp;14</a></li>
+<li><strong>Temporal CTR Patterns</strong>:
+<ul>
+<li>Short-term periodic effects (customer behavior trends) <a href="#lst-ctr-model" class="quarto-xref">Code&nbsp;14</a></li>
+<li>Long-term periodic effects (seasonal buying patterns) <a href="#lst-ctr-model" class="quarto-xref">Code&nbsp;14</a></li>
+</ul></li>
+<li><strong>Final Clicks</strong>: Modeled as a Binomial distribution based on these probabilities <a href="#lst-obs-click-model" class="quarto-xref">Code&nbsp;15</a></li>
+</ul>
+<div id="cell-61" class="cell">
+<div id="lst-ctr-model" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-ctr-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;14: Define the CTR model.
+</figcaption>
+<div aria-describedby="lst-ctr-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-ctr-model"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-ctr-model-1"><a href="#lst-ctr-model-1" aria-hidden="true" tabindex="-1"></a>base_ctr <span class="op">=</span> Prior(</span>
+<span id="lst-ctr-model-2"><a href="#lst-ctr-model-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"base_ctr"</span>, </span>
+<span id="lst-ctr-model-3"><a href="#lst-ctr-model-3" aria-hidden="true" tabindex="-1"></a>    prior_name<span class="op">=</span><span class="st">"Normal"</span>, </span>
+<span id="lst-ctr-model-4"><a href="#lst-ctr-model-4" aria-hidden="true" tabindex="-1"></a>    mu<span class="op">=</span><span class="dv">0</span>, </span>
+<span id="lst-ctr-model-5"><a href="#lst-ctr-model-5" aria-hidden="true" tabindex="-1"></a>    sigma<span class="op">=</span><span class="dv">1</span></span>
+<span id="lst-ctr-model-6"><a href="#lst-ctr-model-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="lst-ctr-model-7"><a href="#lst-ctr-model-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-ctr-model-8"><a href="#lst-ctr-model-8" aria-hidden="true" tabindex="-1"></a>noise <span class="op">=</span> Prior(</span>
+<span id="lst-ctr-model-9"><a href="#lst-ctr-model-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ctr_noise"</span>, </span>
+<span id="lst-ctr-model-10"><a href="#lst-ctr-model-10" aria-hidden="true" tabindex="-1"></a>    prior_name<span class="op">=</span><span class="st">"Normal"</span>, </span>
+<span id="lst-ctr-model-11"><a href="#lst-ctr-model-11" aria-hidden="true" tabindex="-1"></a>    sigma<span class="op">=</span>Prior(</span>
+<span id="lst-ctr-model-12"><a href="#lst-ctr-model-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ctr_noise_scale"</span>, </span>
+<span id="lst-ctr-model-13"><a href="#lst-ctr-model-13" aria-hidden="true" tabindex="-1"></a>        prior_name<span class="op">=</span><span class="st">"HalfNormal"</span>, </span>
+<span id="lst-ctr-model-14"><a href="#lst-ctr-model-14" aria-hidden="true" tabindex="-1"></a>        sigma<span class="op">=</span><span class="fl">.01</span>,</span>
+<span id="lst-ctr-model-15"><a href="#lst-ctr-model-15" aria-hidden="true" tabindex="-1"></a>        dims<span class="op">=</span><span class="bu">tuple</span>()</span>
+<span id="lst-ctr-model-16"><a href="#lst-ctr-model-16" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="lst-ctr-model-17"><a href="#lst-ctr-model-17" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span>(<span class="st">"date"</span>,)</span>
+<span id="lst-ctr-model-18"><a href="#lst-ctr-model-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="lst-ctr-model-19"><a href="#lst-ctr-model-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="lst-ctr-model-20"><a href="#lst-ctr-model-20" aria-hidden="true" tabindex="-1"></a>ctr <span class="op">=</span> ((</span>
+<span id="lst-ctr-model-21"><a href="#lst-ctr-model-21" aria-hidden="true" tabindex="-1"></a>    short_periodic_ctr </span>
+<span id="lst-ctr-model-22"><a href="#lst-ctr-model-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> long_periodic_ctr </span>
+<span id="lst-ctr-model-23"><a href="#lst-ctr-model-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> base_ctr</span>
+<span id="lst-ctr-model-24"><a href="#lst-ctr-model-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> noise</span>
+<span id="lst-ctr-model-25"><a href="#lst-ctr-model-25" aria-hidden="true" tabindex="-1"></a>)(time_data)</span>
+<span id="lst-ctr-model-26"><a href="#lst-ctr-model-26" aria-hidden="true" tabindex="-1"></a>).transform(pt.sigmoid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<div id="cell-62" class="cell">
+<div id="lst-obs-click-model" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
+<figure class="quarto-float quarto-float-lst figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-obs-click-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Listing&nbsp;15: Define the model for the observed clicks.
+</figcaption>
+<div aria-describedby="lst-obs-click-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="sourceCode cell-code" id="lst-obs-click-model"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="lst-obs-click-model-1"><a href="#lst-obs-click-model-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> search_model:</span>
+<span id="lst-obs-click-model-2"><a href="#lst-obs-click-model-2" aria-hidden="true" tabindex="-1"></a>    ctr <span class="op">=</span> handle_dims(</span>
+<span id="lst-obs-click-model-3"><a href="#lst-obs-click-model-3" aria-hidden="true" tabindex="-1"></a>        ctr.<span class="bu">apply</span>(obs_budget_data), </span>
+<span id="lst-obs-click-model-4"><a href="#lst-obs-click-model-4" aria-hidden="true" tabindex="-1"></a>        ctr._dims, </span>
+<span id="lst-obs-click-model-5"><a href="#lst-obs-click-model-5" aria-hidden="true" tabindex="-1"></a>        (<span class="st">"date"</span>, <span class="st">"geo"</span>))</span>
+<span id="lst-obs-click-model-6"><a href="#lst-obs-click-model-6" aria-hidden="true" tabindex="-1"></a>    clicks_obs <span class="op">=</span> pm.Binomial(</span>
+<span id="lst-obs-click-model-7"><a href="#lst-obs-click-model-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"clicks_obs"</span>,</span>
+<span id="lst-obs-click-model-8"><a href="#lst-obs-click-model-8" aria-hidden="true" tabindex="-1"></a>        n<span class="op">=</span>impressions_obs,</span>
+<span id="lst-obs-click-model-9"><a href="#lst-obs-click-model-9" aria-hidden="true" tabindex="-1"></a>        p<span class="op">=</span>ctr,</span>
+<span id="lst-obs-click-model-10"><a href="#lst-obs-click-model-10" aria-hidden="true" tabindex="-1"></a>        dims<span class="op">=</span>(<span class="st">"date"</span>, <span class="st">"geo"</span>),</span>
+<span id="lst-obs-click-model-11"><a href="#lst-obs-click-model-11" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</figure>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Key assumptions and justifications:
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Sigmoid transformation</strong>: Ensures click probabilities stay between 0 and 1</li>
+<li><strong>Binomial distribution</strong> for clicks: Models the binary outcome (clicked/not clicked) for each impression</li>
+<li><strong>Temporal components</strong>: Captures how user behavior varies by day of week and season</li>
+<li><strong>Hierarchical structure</strong>: Allows for geographic differences in click behavior</li>
+</ul>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Prior Simulated Clicks</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">Average Clicks</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div id="cell-fig-model-simulated-clicks" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-model-simulated-clicks" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-model-simulated-clicks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-model-simulated-clicks-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-model-simulated-clicks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12: Simulated search clicks from the model. Note that when budget is 0, clicks are also 0.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div id="cell-fig-model-average-clicks" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-model-average-clicks" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-model-average-clicks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-model-average-clicks-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-model-average-clicks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13: Simulated clicks from the model.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="the-complete-probabilistic-model" class="level2">
+<h2 class="anchored" data-anchor-id="the-complete-probabilistic-model">The Complete Probabilistic Model</h2>
+<p>The full model integrates all these components in a Bayesian framework:</p>
+<div id="cell-fig-full-pymc-model" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-full-pymc-model" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-full-pymc-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-full-pymc-model-output-1.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-full-pymc-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14: Full PyMC model for the search volume and impressions data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>This probabilistic approach offers several advantages:</p>
+<ol type="1">
+<li><strong>Uncertainty quantification</strong>: Provides confidence intervals around predictions</li>
+<li><strong>Parameter learning</strong>: Infers key parameters like competitor pressure from your historical data</li>
+<li><strong>Future forecasting</strong>: Projects expected performance under different budget scenarios</li>
+<li><strong>Anomaly detection</strong>: Identifies when performance diverges from expectations</li>
+</ol>
+</section>
+<section id="fitting-the-model" class="level2">
+<h2 class="anchored" data-anchor-id="fitting-the-model">Fitting the Model</h2>
+<div id="cell-75" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> partial_observe(model, obs_data, input_data, coords, target_accept<span class="op">=</span><span class="fl">.70</span>):</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> pm.observe(model, obs_data):</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        pm.set_data(input_data, coords<span class="op">=</span>coords)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        trace <span class="op">=</span> pm.sample(<span class="dv">1000</span>, tune<span class="op">=</span><span class="dv">1000</span>, target_accept<span class="op">=</span>target_accept, nuts_sampler<span class="op">=</span><span class="st">'nutpie'</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> trace</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>search_volume_trace <span class="op">=</span> partial_observe(</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    search_model, </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    {<span class="st">'search_volume_obs'</span>: train_data.search_volume.values,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'impressions_obs'</span>: train_data.impressions.values,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'clicks_obs'</span>: train_data.observed_clicks.values}, </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    {<span class="st">'time'</span>: train_data[<span class="st">'time'</span>].values,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'budget'</span>: train_data.budget.values}, </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    coords,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    target_accept<span class="op">=</span><span class="fl">.95</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    :root {
+        --column-width-1: 40%; /* Progress column width */
+        --column-width-2: 15%; /* Chain column width */
+        --column-width-3: 15%; /* Divergences column width */
+        --column-width-4: 15%; /* Step Size column width */
+        --column-width-5: 15%; /* Gradients/Draw column width */
+    }
+
+    .nutpie {
+        max-width: 800px;
+        margin: 10px auto;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        //color: #333;
+        //background-color: #fff;
+        padding: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        font-size: 14px; /* Smaller font size for a more compact look */
+    }
+    .nutpie table {
+        width: 100%;
+        border-collapse: collapse; /* Remove any extra space between borders */
+    }
+    .nutpie th, .nutpie td {
+        padding: 8px 10px; /* Reduce padding to make table more compact */
+        text-align: left;
+        border-bottom: 1px solid #888;
+    }
+    .nutpie th {
+        //background-color: #f0f0f0;
+    }
+
+    .nutpie th:nth-child(1) { width: var(--column-width-1); }
+    .nutpie th:nth-child(2) { width: var(--column-width-2); }
+    .nutpie th:nth-child(3) { width: var(--column-width-3); }
+    .nutpie th:nth-child(4) { width: var(--column-width-4); }
+    .nutpie th:nth-child(5) { width: var(--column-width-5); }
+
+    .nutpie progress {
+        width: 100%;
+        height: 15px; /* Smaller progress bars */
+        border-radius: 5px;
+    }
+    progress::-webkit-progress-bar {
+        background-color: #eee;
+        border-radius: 5px;
+    }
+    progress::-webkit-progress-value {
+        background-color: #5cb85c;
+        border-radius: 5px;
+    }
+    progress::-moz-progress-bar {
+        background-color: #5cb85c;
+        border-radius: 5px;
+    }
+    .nutpie .progress-cell {
+        width: 100%;
+    }
+
+    .nutpie p strong { font-size: 16px; font-weight: bold; }
+
+    @media (prefers-color-scheme: dark) {
+        .nutpie {
+            //color: #ddd;
+            //background-color: #1e1e1e;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .nutpie table, .nutpie th, .nutpie td {
+            border-color: #555;
+            color: #ccc;
+        }
+        .nutpie th {
+            background-color: #2a2a2a;
+        }
+        .nutpie progress::-webkit-progress-bar {
+            background-color: #444;
+        }
+        .nutpie progress::-webkit-progress-value {
+            background-color: #3178c6;
+        }
+        .nutpie progress::-moz-progress-bar {
+            background-color: #3178c6;
+        }
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+<div class="nutpie">
+    <p><strong>Sampler Progress</strong></p>
+    <p>Total Chains: <span id="total-chains">4</span></p>
+    <p>Active Chains: <span id="active-chains">0</span></p>
+    <p>
+        Finished Chains:
+        <span id="active-chains">4</span>
+    </p>
+    <p>Sampling for 5 minutes</p>
+    <p>
+        Estimated Time to Completion:
+        <span id="eta">now</span>
+    </p>
+
+    <progress id="total-progress-bar" max="8000" value="8000">
+    </progress>
+    <table>
+        <thead>
+            <tr>
+                <th>Progress</th>
+                <th>Draws</th>
+                <th>Divergences</th>
+                <th>Step Size</th>
+                <th>Gradients/Draw</th>
+            </tr>
+        </thead>
+        <tbody id="chain-details">
+            
+                <tr>
+                    <td class="progress-cell">
+                        <progress max="2000" value="2000">
+                        </progress>
+                    </td>
+                    <td>2000</td>
+                    <td>0</td>
+                    <td>0.03</td>
+                    <td>1023</td>
+                </tr>
+            
+                <tr>
+                    <td class="progress-cell">
+                        <progress max="2000" value="2000">
+                        </progress>
+                    </td>
+                    <td>2000</td>
+                    <td>0</td>
+                    <td>0.02</td>
+                    <td>1023</td>
+                </tr>
+            
+                <tr>
+                    <td class="progress-cell">
+                        <progress max="2000" value="2000">
+                        </progress>
+                    </td>
+                    <td>2000</td>
+                    <td>0</td>
+                    <td>0.03</td>
+                    <td>1023</td>
+                </tr>
+            
+                <tr>
+                    <td class="progress-cell">
+                        <progress max="2000" value="2000">
+                        </progress>
+                    </td>
+                    <td>2000</td>
+                    <td>0</td>
+                    <td>0.03</td>
+                    <td>127</td>
+                </tr>
+            
+            
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+<div id="cell-77" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>search_volume_pred <span class="op">=</span> predict_full_period(search_volume_trace)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Sampling: [clicks_obs, ctr_noise, daily_geo_shocks_search_volume, impressions_obs, search_volume_obs]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"975fc47a7c9145fd964b42d9471d825f","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
+</div>
+</div>
+<section id="forecast-results" class="level3">
+<h3 class="anchored" data-anchor-id="forecast-results">Forecast Results</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">Search Volume</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">Search Impressions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-3" role="tab" aria-controls="tabset-6-3" aria-selected="false">Clicks</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<div id="cell-fig-agg-search-volume-forecast" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-agg-search-volume-forecast" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-agg-search-volume-forecast-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-agg-search-volume-forecast-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agg-search-volume-forecast-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;15: Forecasted search volume. The model captures the seasonal patterns in the data and the uncertainty in the forecast. The model forecast is accurate for the first 30 days after the training data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<div id="cell-fig-agg-impressions-forecast" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-agg-impressions-forecast" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-agg-impressions-forecast-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-agg-impressions-forecast-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agg-impressions-forecast-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16: Forecasted impressions. The model captures the seasonal patterns in the data and the uncertainty in the forecast. The model forecast is accurate for the first 30 days after the training data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
+<div id="cell-fig-agg-clicks-forecast" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-agg-clicks-forecast" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-agg-clicks-forecast-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-agg-clicks-forecast-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agg-clicks-forecast-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;17: Forecasted impressions. The model captures the seasonal patterns in the data and the uncertainty in the forecast. The model forecast is accurate for the first 30 days after the training data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div id="fig-search-volume-trace" class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<caption>Posterior estimate for the function parameters relating budget to impressions.</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">mean</th>
+<th data-quarto-table-cell-role="th">sd</th>
+<th data-quarto-table-cell-role="th">hdi_3%</th>
+<th data-quarto-table-cell-role="th">hdi_97%</th>
+<th data-quarto-table-cell-role="th">mcse_mean</th>
+<th data-quarto-table-cell-role="th">mcse_sd</th>
+<th data-quarto-table-cell-role="th">ess_bulk</th>
+<th data-quarto-table-cell-role="th">ess_tail</th>
+<th data-quarto-table-cell-role="th">r_hat</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">search_volume_multiplier</td>
+<td>0.251</td>
+<td>0.002</td>
+<td>0.248</td>
+<td>0.254</td>
+<td>0.000</td>
+<td>0.00</td>
+<td>599.0</td>
+<td>893.0</td>
+<td>1.01</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">competitor_pressure</td>
+<td>30.320</td>
+<td>0.415</td>
+<td>29.569</td>
+<td>31.139</td>
+<td>0.017</td>
+<td>0.01</td>
+<td>592.0</td>
+<td>899.0</td>
+<td>1.01</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<section id="model-updates" class="level4">
+<h4 class="anchored" data-anchor-id="model-updates">Model Updates</h4>
+<div id="cell-90" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>train_data <span class="op">=</span> data.isel(date<span class="op">=</span><span class="bu">slice</span>(<span class="va">None</span>, <span class="dv">200</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>updated_coords <span class="op">=</span> {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"date"</span>: train_data.date.values,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"geo"</span>: train_data.geo.values</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>updated_search_volume_trace <span class="op">=</span> partial_observe(</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    search_model, </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    {<span class="st">'search_volume_obs'</span>: train_data.search_volume.values,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'impressions_obs'</span>: train_data.impressions.values,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'clicks_obs'</span>: train_data.observed_clicks.values}, </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    {<span class="st">'time'</span>: train_data[<span class="st">'time'</span>].values,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'budget'</span>: train_data.budget.values}, </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    updated_coords,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    target_accept<span class="op">=</span><span class="fl">.95</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    :root {
+        --column-width-1: 40%; /* Progress column width */
+        --column-width-2: 15%; /* Chain column width */
+        --column-width-3: 15%; /* Divergences column width */
+        --column-width-4: 15%; /* Step Size column width */
+        --column-width-5: 15%; /* Gradients/Draw column width */
+    }
+
+    .nutpie {
+        max-width: 800px;
+        margin: 10px auto;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        //color: #333;
+        //background-color: #fff;
+        padding: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        font-size: 14px; /* Smaller font size for a more compact look */
+    }
+    .nutpie table {
+        width: 100%;
+        border-collapse: collapse; /* Remove any extra space between borders */
+    }
+    .nutpie th, .nutpie td {
+        padding: 8px 10px; /* Reduce padding to make table more compact */
+        text-align: left;
+        border-bottom: 1px solid #888;
+    }
+    .nutpie th {
+        //background-color: #f0f0f0;
+    }
+
+    .nutpie th:nth-child(1) { width: var(--column-width-1); }
+    .nutpie th:nth-child(2) { width: var(--column-width-2); }
+    .nutpie th:nth-child(3) { width: var(--column-width-3); }
+    .nutpie th:nth-child(4) { width: var(--column-width-4); }
+    .nutpie th:nth-child(5) { width: var(--column-width-5); }
+
+    .nutpie progress {
+        width: 100%;
+        height: 15px; /* Smaller progress bars */
+        border-radius: 5px;
+    }
+    progress::-webkit-progress-bar {
+        background-color: #eee;
+        border-radius: 5px;
+    }
+    progress::-webkit-progress-value {
+        background-color: #5cb85c;
+        border-radius: 5px;
+    }
+    progress::-moz-progress-bar {
+        background-color: #5cb85c;
+        border-radius: 5px;
+    }
+    .nutpie .progress-cell {
+        width: 100%;
+    }
+
+    .nutpie p strong { font-size: 16px; font-weight: bold; }
+
+    @media (prefers-color-scheme: dark) {
+        .nutpie {
+            //color: #ddd;
+            //background-color: #1e1e1e;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .nutpie table, .nutpie th, .nutpie td {
+            border-color: #555;
+            color: #ccc;
+        }
+        .nutpie th {
+            background-color: #2a2a2a;
+        }
+        .nutpie progress::-webkit-progress-bar {
+            background-color: #444;
+        }
+        .nutpie progress::-webkit-progress-value {
+            background-color: #3178c6;
+        }
+        .nutpie progress::-moz-progress-bar {
+            background-color: #3178c6;
+        }
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+<div class="nutpie">
+    <p><strong>Sampler Progress</strong></p>
+    <p>Total Chains: <span id="total-chains">4</span></p>
+    <p>Active Chains: <span id="active-chains">0</span></p>
+    <p>
+        Finished Chains:
+        <span id="active-chains">4</span>
+    </p>
+    <p>Sampling for 8 minutes</p>
+    <p>
+        Estimated Time to Completion:
+        <span id="eta">now</span>
+    </p>
+
+    <progress id="total-progress-bar" max="8000" value="8000">
+    </progress>
+    <table>
+        <thead>
+            <tr>
+                <th>Progress</th>
+                <th>Draws</th>
+                <th>Divergences</th>
+                <th>Step Size</th>
+                <th>Gradients/Draw</th>
+            </tr>
+        </thead>
+        <tbody id="chain-details">
+            
+                <tr>
+                    <td class="progress-cell">
+                        <progress max="2000" value="2000">
+                        </progress>
+                    </td>
+                    <td>2000</td>
+                    <td>0</td>
+                    <td>0.03</td>
+                    <td>127</td>
+                </tr>
+            
+                <tr>
+                    <td class="progress-cell">
+                        <progress max="2000" value="2000">
+                        </progress>
+                    </td>
+                    <td>2000</td>
+                    <td>0</td>
+                    <td>0.03</td>
+                    <td>1023</td>
+                </tr>
+            
+                <tr>
+                    <td class="progress-cell">
+                        <progress max="2000" value="2000">
+                        </progress>
+                    </td>
+                    <td>2000</td>
+                    <td>0</td>
+                    <td>0.03</td>
+                    <td>127</td>
+                </tr>
+            
+                <tr>
+                    <td class="progress-cell">
+                        <progress max="2000" value="2000">
+                        </progress>
+                    </td>
+                    <td>2000</td>
+                    <td>0</td>
+                    <td>0.02</td>
+                    <td>1023</td>
+                </tr>
+            
+            
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+<div id="cell-91" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>updated_search_volume_pred <span class="op">=</span> predict_full_period(updated_search_volume_trace)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Sampling: [clicks_obs, ctr_noise, daily_geo_shocks_search_volume, impressions_obs, search_volume_obs]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"85a596ec66824034a569931246885619","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true">Search Volume</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false">Impressions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-3" role="tab" aria-controls="tabset-7-3" aria-selected="false">Clicks</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<div id="cell-fig-agg-search-volume-forecast-update-1" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-agg-search-volume-forecast-update-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-agg-search-volume-forecast-update-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-agg-search-volume-forecast-update-1-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agg-search-volume-forecast-update-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18: Forecasted search volume. The model captures the seasonal patterns in the data and the uncertainty in the forecast. The model forecast is accurate for the first 30 days after the training data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<div id="cell-fig-agg-impressions-forecast-update" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-agg-impressions-forecast-update" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-agg-impressions-forecast-update-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-agg-impressions-forecast-update-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agg-impressions-forecast-update-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;19: Forecasted impressions. The model captures the seasonal patterns in the data and the uncertainty in the forecast. The model forecast is accurate for the first 30 days after the training data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-7-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-3-tab">
+<div id="cell-fig-agg-clicks-forecast-update" class="cell">
+<div class="cell-output cell-output-display">
+<div id="fig-agg-clicks-forecast-update" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-agg-clicks-forecast-update-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="00_search_prediction_files/figure-html/fig-agg-clicks-forecast-update-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agg-clicks-forecast-update-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;20: Forecasted impressions. The model captures the seasonal patterns in the data and the uncertainty in the forecast. The model forecast is accurate for the first 30 days after the training data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="practical-applications-optimizing-your-strategy" class="level2">
+<h2 class="anchored" data-anchor-id="practical-applications-optimizing-your-strategy">Practical Applications: Optimizing Your Strategy</h2>
+<p>This model supports several critical business decisions:</p>
+<section id="budget-optimization" class="level3">
+<h3 class="anchored" data-anchor-id="budget-optimization">Budget Optimization</h3>
+<ul>
+<li><strong>Finding the inflection point</strong>: Identify where additional spending faces significantly diminishing returns</li>
+<li><strong>Scenario testing</strong>: Predict outcomes from different budget levels before committing resources</li>
+</ul>
+</section>
+<section id="geographic-allocation" class="level3">
+<h3 class="anchored" data-anchor-id="geographic-allocation">Geographic Allocation</h3>
+<ul>
+<li><strong>Market efficiency comparison</strong>: Identify which regions provide better returns on ad spend</li>
+<li><strong>Reallocation strategies</strong>: Shift budget from saturated to more responsive markets</li>
+</ul>
+</section>
+<section id="seasonal-planning" class="level3">
+<h3 class="anchored" data-anchor-id="seasonal-planning">Seasonal Planning</h3>
+<ul>
+<li><strong>Preemptive adjustments</strong>: Increase budget before seasonal demand spikes</li>
+<li><strong>Efficiency preservation</strong>: Reduce spending during predictable low-volume periods</li>
+</ul>
+</section>
+<section id="anomaly-detection" class="level3">
+<h3 class="anchored" data-anchor-id="anomaly-detection">Anomaly Detection</h3>
+<ul>
+<li><strong>Performance monitoring</strong>: Identify when actual results deviate from expectations</li>
+<li><strong>Competitive intelligence</strong>: Detect when marketplace dynamics change significantly</li>
+</ul>
+</section>
+</section>
+<section id="limitations-and-considerations" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-and-considerations">Limitations and Considerations</h2>
+<p>Like all models this one is wrong, so it is important to understand the assumptions this model makes:</p>
+<ol type="1">
+<li><p><strong>Competitor behavior assumptions</strong>: The model assumes competitor pressure changes slowly; rapid competitive shifts may reduce forecast accuracy</p></li>
+<li><p><strong>Market disruptions</strong>: Major external events (like a pandemic) may invalidate historical patterns</p></li>
+<li><p><strong>New market limitations</strong>: Limited historical data for new geographic regions may reduce forecast accuracy initially</p></li>
+<li><p><strong>Attribution windows</strong>: The model assumes clicks are attributed to impressions within the same time window</p></li>
+</ol>
+<p>This model is designed to be modular, so if any of these assumptions are violated in such a way that the model is no longer useful it can be ammended.</p>
+</section>
+<section id="next-steps-implementing-the-model" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps-implementing-the-model">Next Steps: Implementing the Model</h2>
+<p>To implement this model for your business:</p>
+<ol type="1">
+<li><strong>Data integration</strong>: Connect your search advertising platform data</li>
+<li><strong>Historical fitting</strong>: Train the model on your past performance</li>
+<li><strong>Scenario planning</strong>: Test different budget allocation strategies</li>
+<li><strong>Continuous refinement</strong>: Update the model as new data becomes available</li>
+</ol>
+</section>
+<section id="conclusion-the-value-of-sophisticated-modeling" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-the-value-of-sophisticated-modeling">Conclusion: The Value of Sophisticated Modeling</h2>
+<p>Traditional approaches to search advertising often rely on simplistic assumptions that don’t capture real-world complexity. This probabilistic model overcomes these limitations by:</p>
+<ul>
+<li><strong>Respecting causal structure</strong>: Distinguishing what you control from what you don’t</li>
+<li><strong>Capturing non-linearity</strong>: Modeling diminishing returns and saturation effects</li>
+<li><strong>Accounting for uncertainty</strong>: Providing confidence intervals around predictions</li>
+<li><strong>Integrating multiple factors</strong>: Combining seasonality, geography, and marketplace dynamics</li>
+</ul>
+<p>This sophisticated approach provides more accurate forecasts and enables smarter budget allocation decisions across time periods and geographic markets.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/redam94\.github\.io\/search-forecast");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/redam94/search-forecast/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
